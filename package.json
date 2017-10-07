@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/nyc --reporter=text --reporter=lcov ./node_modules/.bin/mocha --require babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,15 @@
     "eslint": "^4.8.0"
   },
   "devDependencies": {
+    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0"
+    "babel-preset-env": "^1.6.0",
+    "chai": "^4.1.2",
+    "isparta": "^4.0.0",
+    "istanbul": "^1.0.0-alpha.2",
+    "mocha": "^4.0.1",
+    "nyc": "^11.2.1",
+    "sinon": "^4.0.1",
+    "sinon-chai": "^2.14.0"
   }
 }
