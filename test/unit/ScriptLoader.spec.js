@@ -6,7 +6,7 @@ chai.use(sinonChai)
 
 const expect = chai.expect
 
-import ScriptLoader from '../src/ScriptLoader'
+import ScriptLoader from '../../src/ScriptLoader'
 
 describe('ScriptLoader', () => {
   let loader

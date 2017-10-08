@@ -1,5 +1,5 @@
 # Script Loader
-generic script loader in es6
+a script loader for modular components
 
 # Usage
 simple
