@@ -2,7 +2,7 @@
   "name": "script-loader",
   "version": "1.0.0",
   "description": "script loader for module components",
-  "main": "index.js",
+  "main": "src/ScriptLoader.js",
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "test": "npm run test:unit",
