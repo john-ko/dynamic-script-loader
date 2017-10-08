@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/john-ko/script-loader/badge.svg?branch=master)](https://coveralls.io/github/john-ko/script-loader?branch=master)
+
 # Script Loader
 a script loader for modular components
 
