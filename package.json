@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "test": "npm run test:unit",
     "test:e2e": "./node_modules/.bin/karma start karma.conf.js --single-run",
     "test:unit": "./node_modules/.bin/nyc --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/unit --require babel-core/register"
   },
