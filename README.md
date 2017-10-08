@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/john-ko/script-loader/badge.svg?branch=master)](https://coveralls.io/github/john-ko/script-loader?branch=master)
-[![Build Status](https://travis-ci.org/john-ko/script-loader.svg?branch=master)](https://travis-ci.org/john-ko/script-loader)
+[![Build Status](https://travis-ci.org/john-ko/dynamic-script-loader.svg?branch=master)](https://travis-ci.org/john-ko/dynamic-script-loader)
 
 
 # Script Loader
@@ -10,7 +10,9 @@ this is built with each components being responsible for what 3rd party dependen
 simple
 
 ```
+const ScriptLoader = require('dynamic-script-loader')
 const script = new ScriptLoader()
+
 script.load({
   src: '//path/to/someExternalJS.js',
   async: true,  // default to true, you can leave this out
@@ -32,7 +34,7 @@ heres a couple of ways you can use the script loader
 
 ### using it as a method
 ```
-import ScriptLoader from 'script-loader'
+import ScriptLoader from 'dynamic-script-loader'
 
 Vue.use({
   install: function (Vue, options) {
