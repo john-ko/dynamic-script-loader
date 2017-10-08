@@ -1,8 +1,13 @@
 
 export default class ScriptLoader {
   constructor () {
-    this.scripts = (this.isBrowser() && window.ScriptLoader)
-      ? window.ScriptLoader : {}
+    if (!this.isBrowser()) {
+      this.scripts = {}
+      return
+    }
+
+    this.scripts = window.ScriptLoader || {}
+    window.ScriptLoader = this.scripts
   }
 
   /**
