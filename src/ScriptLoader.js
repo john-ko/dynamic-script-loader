@@ -68,13 +68,13 @@ export default class ScriptLoader {
     this.scripts[src] = true
   }
 
-  getScriptLoaderPromise (src, async, callback) {
-    return new Promise(this.promiseFunction(src, async, callback))
+  getScriptLoaderPromise (src, asyncronus, callback) {
+    return new Promise(this.promiseFunction(src, asyncronus, callback))
   }
 
-  promiseFunction (src, async, callback) {
+  promiseFunction (src, asyncronus, callback = () => {}) {
     return (resolve, reject) => {
-      this.appendScript(src, async, function success () {
+      this.appendScript(src, asyncronus, function success () {
         resolve(callback())
       }, function onError () {
         reject('error')
