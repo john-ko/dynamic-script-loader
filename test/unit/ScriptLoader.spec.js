@@ -258,4 +258,82 @@ describe('ScriptLoader', () => {
       
     })
   })
+
+  describe('promiseFunction (src, async, callback)', () => {
+    let resolve, reject, src, asyncrouns, callback, appendScript
+    let resolver
+
+    beforeEach(() => {
+      resolve = sinon.spy()
+      reject = sinon.spy()
+      src = sinon.spy()
+      asyncrouns = sinon.spy()
+      callback = sinon.spy()
+      appendScript = sinon.spy()
+
+      loader = new ScriptLoader()
+      loader.appendScript = appendScript
+    })
+
+    describe('when resolver gets called', () => {
+      beforeEach(() => {
+        resolver = loader.promiseFunction(src, asyncrouns, callback)
+        resolver(resolve, reject)
+      })
+
+      it('should call appendScript with src param', () => {
+        expect(appendScript).to.have.been.calledWith(src)
+      })
+
+      it('should call appendScript with async param', () => {
+        expect(appendScript).to.have.been.calledWith(src, asyncrouns)
+      })
+    })
+
+    describe('when script runs and will either succeed or fail', () => {
+      let boolean
+
+      beforeEach(() => {
+        loader.appendScript = (src, async, successCallback, failureCallback) => {
+          if (boolean) {
+            successCallback()
+          } else {
+            failureCallback()
+          }
+        }
+        resolver = loader.promiseFunction(src, asyncrouns, callback)
+      })
+
+      describe('when it succeeds', () => {
+        beforeEach(() => {
+          boolean = true
+          resolver(resolve, reject)
+        })
+
+        it('should call the callback', () => {
+          expect(callback).to.have.been.called
+        })
+
+        it('should call the resolve function', () => {
+          expect(resolve).to.have.been.called
+        })
+      })
+
+      describe('when it fails', () => {
+        beforeEach(() => {
+          boolean = false
+          resolver(resolve, reject)
+        })
+
+        it('should not have called the callback', () => {
+          expect(callback).to.have.not.been.called
+        })
+
+        it('should have called the reject function', () => {
+          expect(reject).to.have.been.called
+        })
+      })
+
+    })
+  })
 })

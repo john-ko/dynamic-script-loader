@@ -91,4 +91,34 @@ describe('ScriptLoader', () => {
       })
     })
   })
+
+  describe('when no callback is given', () => {
+    let success, failure
+    before((done) => {
+      success = sinon.spy()
+      failure = sinon.spy()
+      loader = new ScriptLoader()
+
+      loader.load({
+        src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js',
+        async: true,
+      })
+        .then(() => {
+          success()
+          done()
+        })
+        .catch(() => {
+          failure()
+          done()
+        })
+    })
+
+    it('should call the success handler', () => {
+      expect(success).to.have.been.called
+    })
+
+    it('should not call the failure handler', () => {
+      expect(failure).to.have.not.been.called
+    })
+  })
 })
