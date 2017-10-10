@@ -95,3 +95,12 @@ script.load('//path/to/someExternalJS.js')
 ```
 
 or instead of `once` maybe `setup` ?
+
+# Contributing
+
+- `git clone git@github.com:john-ko/dynamic-script-loader.git`
+- `cd dynamic-script-loader`
+- `npm install`
+- `add changes`
+- `npm run test:unit`
+- `npm run test:e2e`
