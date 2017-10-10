@@ -3,8 +3,12 @@
 
 
 # Script Loader
-a script loader for modular components in es6 (build process coming soon)
-this is built with each components being responsible for what 3rd party dependencies they need
+A script loader for modular components in es6 (build process coming soon). This is built so that each components being responsible for what 3rd party dependencies they need.
+- if script has not been loaded, it will load  the script, run the one time setup callback, then execute the `then`
+- if a script has already been loaded, it will execute the `then`
+
+# Install
+`npm i -S dynamic-script-loader`
 
 # Usage
 simple
@@ -38,7 +42,7 @@ import ScriptLoader from 'dynamic-script-loader'
 
 Vue.use({
   install: function (Vue, options) {
-    Vue.prototype.$loader = new ScriptLoader()
+    Vue.prototype.$script = new ScriptLoader()
   }
 })
 
@@ -51,8 +55,8 @@ data () {
 },
 
 mounted () {
-  // loader.load sounds weird... rename?
-  this.$loader.load({
+  // the loader will not load libraries if they have already been loaded
+  this.$script.load({
     src: '//some-cdn/src/js/library.js',
     async: true
   }, () => {
