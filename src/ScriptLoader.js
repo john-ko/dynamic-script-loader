@@ -23,7 +23,8 @@ export default class ScriptLoader {
    *
    * arguments:
    *   options = {
-   *   
+   *     src: '//cdn/javascript/library.js'
+   *     async: true
    *   }
    *
    *   callback = () => {}
@@ -44,11 +45,10 @@ export default class ScriptLoader {
 
   /**
    * appendScript
-   * @param  {[type]}  src        [description]
-   * @param  {Boolean} asyncronus [description]
-   * @param  {[type]}  success    [description]
-   * @param  {[type]}  failure    [description]
-   * @return {[type]}             [description]
+   * @param  {String}  src
+   * @param  {Boolean} asyncronus
+   * @param  {Function}  success
+   * @param  {Function}  failure
    */
   appendScript(src, asyncronus = true, success, failure) {
     const script = document.createElement('script')
@@ -60,18 +60,48 @@ export default class ScriptLoader {
     document.head.appendChild(script)
   }
 
+  /**
+   * hasScriptBeenLoaded
+   *
+   * checks to see if script has already been loaded
+   *
+   * @param  {String}  src
+   * @return {Boolean} returns either true | undefined
+   */
   hasScriptBeenLoaded (src) {
     return this.scripts[src]
   }
 
+  /**
+   * setScript
+   *
+   * sets key (src) and value to true
+   *
+   * @param {String} src
+   */
   setScript (src) {
     this.scripts[src] = true
   }
 
+  /**
+   * getScriptLoaderPromise
+   * 
+   * @param  {String}   src
+   * @param  {Boolean}   asyncronus
+   * @param  {Function} callback
+   * @return {Promise}
+   */
   getScriptLoaderPromise (src, asyncronus, callback) {
     return new Promise(this.promiseFunction(src, asyncronus, callback))
   }
 
+  /**
+   * [description]
+   * @param  {String}   src
+   * @param  {Boolean}   asyncronus
+   * @param  {Function} callback
+   * @return {Function}
+   */
   promiseFunction (src, asyncronus, callback = () => {}) {
     return (resolve, reject) => {
       this.appendScript(src, asyncronus, function success () {
