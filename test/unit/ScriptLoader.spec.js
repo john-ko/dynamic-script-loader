@@ -94,7 +94,7 @@ describe('ScriptLoader', () => {
    * load
    *
    */
-  describe('load (options, callback)', () => {
+  xdescribe('load (options, callback)', () => {
     let options, callback
 
     beforeEach(() => {
@@ -166,7 +166,7 @@ describe('ScriptLoader', () => {
    * appendScript
    *
    */
-  describe('appendScript (src, asyncrouns, success, failure)', () => {
+  xdescribe('appendScript (src, asyncrouns, success, failure)', () => {
     let src, async, success, failure
 
     beforeEach(() => {
@@ -259,7 +259,7 @@ describe('ScriptLoader', () => {
     })
   })
 
-  describe('promiseFunction (src, async, callback)', () => {
+  xdescribe('promiseFunction (src, async, callback)', () => {
     let resolve, reject, src, asyncrouns, callback, appendScript
     let resolver
 
