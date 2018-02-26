@@ -1,4 +1,3 @@
-
 export default class ScriptLoader {
   constructor () {
     if (!this.isBrowser()) {
@@ -23,8 +22,9 @@ export default class ScriptLoader {
    *
    * arguments:
    *   options = {
-   *     src: '//cdn/javascript/library.js'
-   *     async: true
+   *     src: '//cdn/javascript/library.js',
+   *     async: true,
+   *     crossorigin: 'anonymous'
    *   }
    *
    *   callback = () => {}
@@ -40,23 +40,35 @@ export default class ScriptLoader {
 
     this.setScript(options.src)
 
-    return this.getScriptLoaderPromise(options.src, options.async, callback)
+    return this.getScriptLoaderPromise(options, callback)
   }
 
   /**
    * appendScript
-   * @param  {String}  src
-   * @param  {Boolean} asyncronus
-   * @param  {Function}  success
-   * @param  {Function}  failure
+   *
+   * @param  {Object}  options    [description]
+   * @param  {[type]}  success    [description]
+   * @param  {[type]}  failure    [description]
+   * @return {[type]}             [description]
    */
-  appendScript(src, asyncronus = true, success, failure) {
+  appendScript(options, success, failure) {
     const script = document.createElement('script')
     script.type = 'text/javascript'
-    script.src = src
-    script.async = asyncronus
+
+
+    if (options.async === false) {
+      delete options.async
+    } else {
+      options.async = true
+    }
+
+    for (const key in options) {
+      script[key] = options[key]
+    }
+
     script.onload = success
     script.onerror = failure
+
     document.head.appendChild(script)
   }
 
@@ -85,26 +97,25 @@ export default class ScriptLoader {
 
   /**
    * getScriptLoaderPromise
-   * 
-   * @param  {String}   src
-   * @param  {Boolean}   asyncronus
+   *
+   * @param  {Object}   options
    * @param  {Function} callback
    * @return {Promise}
    */
-  getScriptLoaderPromise (src, asyncronus, callback) {
-    return new Promise(this.promiseFunction(src, asyncronus, callback))
+  getScriptLoaderPromise (options, callback) {
+    return new Promise(this.promiseFunction(options, callback))
   }
 
   /**
-   * [description]
-   * @param  {String}   src
-   * @param  {Boolean}   asyncronus
+   * promiseFunction
+   *
+   * @param  {Object}   options
    * @param  {Function} callback
    * @return {Function}
    */
-  promiseFunction (src, asyncronus, callback = () => {}) {
+  promiseFunction (options, callback = () => {}) {
     return (resolve, reject) => {
-      this.appendScript(src, asyncronus, function success () {
+      this.appendScript(options, function success () {
         resolve(callback())
       }, function onError () {
         reject('error')
