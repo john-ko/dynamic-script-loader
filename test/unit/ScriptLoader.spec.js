@@ -94,7 +94,7 @@ describe('ScriptLoader', () => {
    * load
    *
    */
-  xdescribe('load (options, callback)', () => {
+  describe('load (options, callback)', () => {
     let options, callback
 
     beforeEach(() => {
@@ -143,16 +143,12 @@ describe('ScriptLoader', () => {
          * duplicate but if any fail, will be easier to find where
          */
 
-        it('calls with the src param in options', () => {
-          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options.src)
+        it('calls with the getScriptLoaderPromise with options param', () => {
+          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options)
         })
 
-        it('calls with the async param in options', () => {
-          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options.src, options.async)
-        })
-
-        it('calls with the callback param', () => {
-          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options.src, options.async, callback)
+        it('calls with the getScriptLoaderPromise with callback', () => {
+          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options, callback)
         })
       })
 
@@ -166,8 +162,8 @@ describe('ScriptLoader', () => {
    * appendScript
    *
    */
-  xdescribe('appendScript (src, asyncrouns, success, failure)', () => {
-    let src, async, success, failure
+  describe('appendScript (src, asyncrouns, success, failure)', () => {
+    let options, success, failure
 
     beforeEach(() => {
       global.document = {
@@ -178,24 +174,49 @@ describe('ScriptLoader', () => {
       }
       document.createElement.returns({})
       loader = new ScriptLoader()
-      src = sinon.spy()
-      async = sinon.spy()
+      options = {}
       success = sinon.spy()
       failure = sinon.spy()
-      loader.appendScript(src, async, success, failure)
     })
 
     it('calls document.createElement with script', () => {
+      loader.appendScript(options, success, failure)
       expect(document.createElement).to.have.been.calledWithExactly('script')
     })
 
     it('appends the script inside the head tag', () => {
+      loader.appendScript(options, success, failure)
       expect(document.head.appendChild).to.have.been.calledWithExactly({
         type: 'text/javascript',
-        src: src,
-        async: async,
+        async: true,
         onload: success,
         onerror: failure
+      })
+    })
+
+    describe('when async flag is set to false', () => {
+      it('should append the script without async flag', () => {
+        options.async = false
+        loader.appendScript(options, success, failure)
+        expect(document.head.appendChild).to.have.been.calledWithExactly({
+          type: 'text/javascript',
+          onload: success,
+          onerror: failure
+        })
+      })
+    })
+
+    describe('when optional variables are adde to options', () => {
+      it('should appear on the script', () => {
+        options.hello = 'world'
+        loader.appendScript(options, success, failure)
+        expect(document.head.appendChild).to.have.been.calledWithExactly({
+          async: true,
+          type: 'text/javascript',
+          onload: success,
+          onerror: failure,
+          hello: 'world',
+        })
       })
     })
   })
@@ -254,22 +275,24 @@ describe('ScriptLoader', () => {
       promise = loader.getScriptLoaderPromise(src, async, callback)
     })
 
-    it('asdf', () => {
-      
-    })
+    it('returns a new promise?', () => {})
   })
 
-  xdescribe('promiseFunction (src, async, callback)', () => {
-    let resolve, reject, src, asyncrouns, callback, appendScript
+  describe('promiseFunction (src, async, callback)', () => {
+    let resolve, reject, options, asyncrouns, callback, appendScript
+    let success, onerror
     let resolver
 
     beforeEach(() => {
       resolve = sinon.spy()
       reject = sinon.spy()
-      src = sinon.spy()
+      options = sinon.spy()
       asyncrouns = sinon.spy()
       callback = sinon.spy()
       appendScript = sinon.spy()
+
+      success = sinon.spy()
+      onerror = sinon.spy()
 
       loader = new ScriptLoader()
       loader.appendScript = appendScript
@@ -277,16 +300,12 @@ describe('ScriptLoader', () => {
 
     describe('when resolver gets called', () => {
       beforeEach(() => {
-        resolver = loader.promiseFunction(src, asyncrouns, callback)
+        resolver = loader.promiseFunction(options, asyncrouns, callback)
         resolver(resolve, reject)
       })
 
-      it('should call appendScript with src param', () => {
-        expect(appendScript).to.have.been.calledWith(src)
-      })
-
-      it('should call appendScript with async param', () => {
-        expect(appendScript).to.have.been.calledWith(src, asyncrouns)
+      it('should call appendScript with options param', () => {
+        expect(appendScript).to.have.been.calledWith(options)
       })
     })
 
@@ -294,14 +313,14 @@ describe('ScriptLoader', () => {
       let boolean
 
       beforeEach(() => {
-        loader.appendScript = (src, async, successCallback, failureCallback) => {
+        loader.appendScript = (options, successCallback, failureCallback) => {
           if (boolean) {
             successCallback()
           } else {
             failureCallback()
           }
         }
-        resolver = loader.promiseFunction(src, asyncrouns, callback)
+        resolver = loader.promiseFunction(options, callback)
       })
 
       describe('when it succeeds', () => {
@@ -333,7 +352,6 @@ describe('ScriptLoader', () => {
           expect(reject).to.have.been.called
         })
       })
-
     })
   })
 })
