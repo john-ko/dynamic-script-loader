@@ -78,6 +78,7 @@ mounted () {
 
 # TODO
 - build process and export to dist folder
+- remove class style and use more functional
 
 would like to use this as
 
