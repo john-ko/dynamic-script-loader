@@ -38,11 +38,11 @@ heres a couple of ways you can use the script loader
 
 ### using it as a method
 ```
-import ScriptLoader from 'dynamic-script-loader'
+import DynamicScriptLoader from 'dynamic-script-loader'
 
 Vue.use({
   install: function (Vue, options) {
-    Vue.prototype.$script = new ScriptLoader()
+    Vue.prototype.$script = new DynamicScriptLoader()
   }
 })
 
