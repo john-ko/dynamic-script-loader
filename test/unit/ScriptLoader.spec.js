@@ -128,32 +128,11 @@ describe('ScriptLoader', () => {
 
     describe('when script has not been loaded', () => {
       let response
+
       beforeEach(() => {
         loader.hasScriptBeenLoaded.returns(false)
         loader.getScriptLoaderPromise.returns('a promise!')
         response = loader.load(options, callback)
-      })
-
-      it('calls setScript with the script src', () => {
-        expect(loader.setScript).to.have.been.calledWithExactly(options.src)
-      })
-
-      describe('calls the getScriptLoaderPromise with params', () => {
-        /*
-         * duplicate but if any fail, will be easier to find where
-         */
-
-        it('calls with the getScriptLoaderPromise with options param', () => {
-          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options)
-        })
-
-        it('calls with the getScriptLoaderPromise with callback', () => {
-          expect(loader.getScriptLoaderPromise).to.have.been.calledWith(options, callback)
-        })
-      })
-
-      it('returns a promise', () => {
-        expect(response).to.be.equal('a promise!')
       })
     })
   })
@@ -265,20 +244,7 @@ describe('ScriptLoader', () => {
     })
   })
 
-  describe('getScriptLoaderPromise (src, async, callback)', () => {
-    let promise, src, async, callback
-    beforeEach(() => {
-      src = sinon.spy()
-      async = sinon.spy()
-      callback = sinon.spy()
-      loader = new ScriptLoader()
-      promise = loader.getScriptLoaderPromise(src, async, callback)
-    })
-
-    it('returns a new promise?', () => {})
-  })
-
-  describe('promiseFunction (src, async, callback)', () => {
+  describe('promiseResolver (src, async, callback)', () => {
     let resolve, reject, options, asyncrouns, callback, appendScript
     let success, onerror
     let resolver
@@ -300,7 +266,7 @@ describe('ScriptLoader', () => {
 
     describe('when resolver gets called', () => {
       beforeEach(() => {
-        resolver = loader.promiseFunction(options, asyncrouns, callback)
+        resolver = loader.promiseResolver(options, asyncrouns, callback)
         resolver(resolve, reject)
       })
 
@@ -320,7 +286,7 @@ describe('ScriptLoader', () => {
             failureCallback()
           }
         }
-        resolver = loader.promiseFunction(options, callback)
+        resolver = loader.promiseResolver(options, callback)
       })
 
       describe('when it succeeds', () => {

@@ -38,9 +38,7 @@ export default class ScriptLoader {
       return Promise.resolve()
     }
 
-    this.setScript(options.src)
-
-    return this.getScriptLoaderPromise(options, callback)
+    return new Promise(this.promiseResolver(options, callback))
   }
 
   /**
@@ -81,7 +79,7 @@ export default class ScriptLoader {
    * @return {Boolean} returns either true | undefined
    */
   hasScriptBeenLoaded (src) {
-    return this.scripts[src]
+    return this.scripts[src] === true
   }
 
   /**
@@ -96,26 +94,16 @@ export default class ScriptLoader {
   }
 
   /**
-   * getScriptLoaderPromise
-   *
-   * @param  {Object}   options
-   * @param  {Function} callback
-   * @return {Promise}
-   */
-  getScriptLoaderPromise (options, callback) {
-    return new Promise(this.promiseFunction(options, callback))
-  }
-
-  /**
-   * promiseFunction
+   * promiseResolver
    *
    * @param  {Object}   options
    * @param  {Function} callback
    * @return {Function}
    */
-  promiseFunction (options, callback = () => {}) {
+  promiseResolver (options, callback = () => {}) {
     return (resolve, reject) => {
-      this.appendScript(options, function success () {
+      this.appendScript(options, () => {
+        this.setScript(options.src, true)
         resolve(callback())
       }, function onError () {
         reject('error')
