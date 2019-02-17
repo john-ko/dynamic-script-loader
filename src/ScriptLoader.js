@@ -58,6 +58,7 @@ export default class ScriptLoader {
       delete options.async
     } else {
       options.async = true
+      options.defer = true
     }
 
     for (const key in options) {
