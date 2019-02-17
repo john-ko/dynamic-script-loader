@@ -100,6 +100,7 @@ describe('ScriptLoader', () => {
     beforeEach(() => {
       options = {
         async: sinon.spy(),
+        defer: sinon.spy(),
         src: sinon.spy()
       }
       callback = sinon.spy()
@@ -168,6 +169,7 @@ describe('ScriptLoader', () => {
       expect(document.head.appendChild).to.have.been.calledWithExactly({
         type: 'text/javascript',
         async: true,
+        defer: true,
         onload: success,
         onerror: failure
       })
@@ -191,6 +193,7 @@ describe('ScriptLoader', () => {
         loader.appendScript(options, success, failure)
         expect(document.head.appendChild).to.have.been.calledWithExactly({
           async: true,
+          defer: true,
           type: 'text/javascript',
           onload: success,
           onerror: failure,
