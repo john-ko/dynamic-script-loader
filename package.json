@@ -4,7 +4,7 @@
   "description": "script loader for module components",
   "main": "src/index.js",
   "scripts": {
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "test": "nyc --reporter=text --reporter=lcov mocha --require @babel/register tests/**/*.spec.js",
@@ -31,6 +31,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.3",
     "mocha": "^5.2.0",
     "mock-browser": "^0.92.14",
     "nyc": "^13.3.0",
