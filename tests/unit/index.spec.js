@@ -59,7 +59,7 @@ describe('dynamic script loader', () => {
         })
     })
 
-    it('if script has been set it returns a promise', (done) => {
+    it('loader runs callback only once', (done) => {
       loadScript({ src: URL }, callback)
         .then(thennable)
 
@@ -67,6 +67,17 @@ describe('dynamic script loader', () => {
         .then(thennable)
         .then(() => {
           expect(callback).to.have.been.calledOnce
+          done()
+        })
+    })
+
+    it('loader runs then after each load call', (done) => {
+      loadScript({ src: URL }, callback)
+        .then(thennable)
+
+      loadScript({ src: URL }, callback)
+        .then(thennable)
+        .then(() => {
           expect(thennable).to.have.been.calledTwice
           done()
         })
