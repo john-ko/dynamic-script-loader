@@ -1,7 +1,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/john-ko/dynamic-script-loader/badge.svg?branch=master)](https://coveralls.io/github/john-ko/dynamic-script-loader?branch=master)
 [![Build Status](https://travis-ci.org/john-ko/dynamic-script-loader.svg?branch=master)](https://travis-ci.org/john-ko/dynamic-script-loader)
 
-
 # Script Loader
 A script loader for modular components in es6 (build process coming soon). This is built so that each components being responsible for what 3rd party dependencies they need.
 - if script has not been loaded, it will load  the script, run the one time setup callback, then execute the `then`

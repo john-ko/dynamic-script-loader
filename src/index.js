@@ -1,9 +1,3 @@
-export const STATUS = {
-  FAILED: 0,
-  LOADING: 1,
-  LOADED: 2,
-}
-
 export function getNewScript (options = {}) {
   const script = document.createElement('script')
   script.type = 'text/javascript'
