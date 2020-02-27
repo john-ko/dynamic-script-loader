@@ -1,4 +1,6 @@
-export function getNewScript (options = {}) {
+const scriptLoader = {}
+
+export function getNewScript (options) {
   const script = document.createElement('script')
   script.type = 'text/javascript'
 
@@ -12,7 +14,7 @@ export function getNewScript (options = {}) {
 
   Object.entries(options).forEach(([key, value]) => {
     if (value) {
-      script[key] = value
+      script.setAttribute(key, value)
     }
   })
 
@@ -33,8 +35,10 @@ export function appendScript (options, success, failure) {
   script.onerror = failure
 
   document.head.appendChild(script)
+}
 
-  return script
+export function getScriptLoader () {
+  return scriptLoader
 }
 
 /**
@@ -46,14 +50,21 @@ export function appendScript (options, success, failure) {
  *  defer: true, // by default,
  * }
  *
- * callback = function
+ * onLoadHandler = function, will only execute once on load
+ * orErrorHandler = function,  will only execute once on error
+ *
+ * return Promise (resolves when the script is loaded, rejects when the script errors)
  */
-export default function (options = {}, callback) {
+export default function (
+  options,
+  onLoadHandler = () => {},
+  orErrorHandler = () => {}
+) {
   if (typeof window !== 'object') {
     return Promise.reject('sorry bro client side only')
   }
 
-  window.scriptLoader = window.scriptLoader || Object.create(null)
+  // window.scriptLoader = window.scriptLoader || Object.create(null)
 
   const src = options.src || ''
 
@@ -62,12 +73,12 @@ export default function (options = {}, callback) {
   }
 
   // create a promise that will return when resolved
-  if (!window.scriptLoader.src) {
-    window.scriptLoader.src = createPromise(options)
-      .then(callback) // call the main callback first
-      .catch(console.error)
+  if (!scriptLoader[src]) {
+    scriptLoader[src] = createPromise(options)
+      .then(onLoadHandler)
+      .catch(orErrorHandler)
   }
 
   // return promise
-  return window.scriptLoader.src
+  return scriptLoader[src]
 }

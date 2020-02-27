@@ -13,21 +13,16 @@ A script loader for modular components in es6 (build process coming soon). This 
 simple
 
 ```
-const ScriptLoader = require('dynamic-script-loader')
-const script = new ScriptLoader()
+const scriptLoader = require('dynamic-script-loader')
 
-script.load({
-  src: '//path/to/someExternalJS.js',
-  async: true,  // default to true, you can leave this out
-}), function oneTimeSetUp () {
-  // window.someExternalJS setup here
-})
-  .then(function externalJSSuccessResolver () {
-    // this runs after one time setup
-  })
-  .catch(function scriptDidntLoad () {
-    console.log(':(')
-  })
+scriptLoader({
+    src: ''//path/to/someExternalJS.js'
+  },
+  onLoadHandler, // optional
+  onErrorHandler // optional
+  )
+  .then(resolverFunction)
+  .catch(catchFunction)
 ```
 
 ## Vue
@@ -37,12 +32,11 @@ heres a couple of ways you can use the script loader
 
 ### using it as a method
 ```
-import DynamicScriptLoader from 'dynamic-script-loader'
+import scriptLoader from 'dynamic-script-loader'
 
 Vue.use({
   install: function (Vue, options) {
-    Vue.prototype.$script = new DynamicScriptLoader()
-  }
+    Vue.prototype.$scriptLoader = scriptLoader
 })
 
 // inside a Vue component
@@ -55,7 +49,7 @@ data () {
 
 mounted () {
   // the loader will not load libraries if they have already been loaded
-  this.$script.load({
+  this.$scriptLoader({
     src: '//some-cdn/src/js/library.js',
     async: true
   }, () => {
