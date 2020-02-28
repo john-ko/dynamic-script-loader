@@ -8,8 +8,6 @@
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "test": "nyc --reporter=text --reporter=lcov mocha --require @babel/register tests/**/*.spec.js",
-    "test:e2e": "./node_modules/.bin/karma start karma.conf.js --single-run",
-    "test:unit": "./node_modules/.bin/nyc --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/unit --require babel-core/register"
   },
   "repository": {
     "type": "git",
