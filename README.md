@@ -72,26 +72,21 @@ mounted () {
 }
 ```
 
+# CAVEATS
+script loading uses URL's as unique keys so if urls change by for example, query string, then the script will try to load it again.
+**example:**
+- urlA = `//www.example.com/script.js`
+- urlB = `https://www.example.com/script.js`
+- urlC = `https://www.example.com/script.js?hi`
+
+the script loader will treat these as separate javascript files
+
 # TODO
-- build process and export to dist folder
-- remove class style and use more functional
-
-would like to use this as
-
-```
-script.load('//path/to/someExternalJS.js')
-  .once(() => {
-    // one time setup
-  })
-  .then(() => {
-    // success! :D
-  })
-  .catch(() => {
-    // failure! D:
-  })
-```
-
-or instead of `once` maybe `setup` ?
+- currently `async` and `defer` and both placed on the tag, after reading up on it, looks like only one is necessary
+- https://bitsofco.de/async-vs-defer/
+- https://flaviocopes.com/javascript-async-defer/
+- will fallback to whichever is Best practice
+- also since this script is most likely loaded on content load and scriptloading is done after, might not matter? should test.
 
 # Contributing
 
@@ -99,5 +94,4 @@ or instead of `once` maybe `setup` ?
 - `cd dynamic-script-loader`
 - `npm install`
 - `add changes`
-- `npm run test:unit`
-- `npm run test:e2e`
+- `npm test`
