@@ -7,7 +7,6 @@
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
-    "test-jest": "jest",
     "test": "jest --coverage"
   },
   "repository": {
