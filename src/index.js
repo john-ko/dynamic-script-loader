@@ -1,5 +1,3 @@
-const scriptLoader = {}
-
 export function getNewScript (options) {
   const script = document.createElement('script')
   script.type = 'text/javascript'
@@ -37,10 +35,6 @@ export function appendScript (options, success, failure) {
   document.head.appendChild(script)
 }
 
-export function getScriptLoader () {
-  return scriptLoader
-}
-
 /**
  * usual signature
  * options = {
@@ -64,7 +58,8 @@ export default function (
     return Promise.reject('sorry bro client side only')
   }
 
-  // window.scriptLoader = window.scriptLoader || Object.create(null)
+  // Gloable namespace to prevent mismatch with different versions
+  window.dynamicScriptLoader = window.dynamicScriptLoader || Object.create(null)
 
   const src = options.src || ''
 
@@ -73,12 +68,12 @@ export default function (
   }
 
   // create a promise that will return when resolved
-  if (!scriptLoader[src]) {
-    scriptLoader[src] = createPromise(options)
+  if (!window.dynamicScriptLoader[src]) {
+    window.dynamicScriptLoader[src] = createPromise(options)
       .then(onLoadHandler)
       .catch(orErrorHandler)
   }
 
   // return promise
-  return scriptLoader[src]
+  return window.dynamicScriptLoader[src]
 }

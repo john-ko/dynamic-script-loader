@@ -3,8 +3,11 @@
 
 # Script Loader
 A script loader for modular components in es6 (build process coming soon). This is built so that each components being responsible for what 3rd party dependencies they need.
-- if script has not been loaded, it will load  the script, run the one time setup callback, then execute the `then`
-- if a script has already been loaded, it will execute the `then`
+- if script has not been loaded, it will load  the script, and return a promise
+- `onLoadHandler` and `onErrorHandler` will execute on script load and on script error
+- script promise will be resolved when the script is loaded, rejects if it errors
+- if a script has already been requested to load throught dynamic script loader, it will return the existing promise
+- all script proimses are added to `window.dynamicScriptLoader` global object
 
 # Install
 `npm i -S dynamic-script-loader`
