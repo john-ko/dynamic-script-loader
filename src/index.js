@@ -1,39 +1,4 @@
-export function getNewScript (options = {}) {
-  const script = document.createElement('script')
-  script.type = 'text/javascript'
-
-  if (options.async !== false) {
-    options.async = true
-  }
-
-  if (options.defer !== false) {
-    options.defer = true
-  }
-
-  Object.entries(options).forEach(([key, value]) => {
-    if (value) {
-      script.setAttribute(key, value)
-    }
-  })
-
-  return script
-}
-
-export function createPromise (options = {}) {
-  return new Promise((resolve, reject) => {
-    // append script to head
-    appendScript(options, resolve, reject)
-  })
-}
-
-export function appendScript (options = {}, success = () => {}, failure = () => {}) {
-  const script = getNewScript(options)
-
-  script.onload = success
-  script.onerror = failure
-
-  document.head.appendChild(script)
-}
+import createPromise from './createPromise'
 
 /**
  * usual signature

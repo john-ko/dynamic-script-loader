@@ -1,67 +1,65 @@
-import { getNewScript } from '../../src/index'
-import { expect } from 'chai'
+import getNewScript from '../../src/getNewScript'
 
 describe('getNewScript (options = {})', () => {
-  // mock document
+  let script = null
+
   beforeEach(() => {
-    const MockBrowser = require('mock-browser').mocks.MockBrowser
-    global.document = new MockBrowser().getDocument()
+    script = null
   })
 
-  afterEach(() => {
-    global.document = {}
-  })
+  describe('async option', () => {
+    it('sets async to true by default', () => {
+      script = getNewScript({})
 
-  it('defaults options into empty object', () => {
-    const script = getNewScript()
+      const boolean = script.getAttribute('async')
 
-    expect(script.tagName).to.be.equal('SCRIPT')
-  })
-
-  it('returns a HTMLScriptElement', () => {
-    const script = getNewScript({})
-
-    expect(script.tagName).to.be.equal('SCRIPT')
-  })
-
-  it('defaults async and defer to true', () => {
-    const script = getNewScript({
-      src: 'https://www.google.com/script.js',
+      expect(boolean).toBe('true')
     })
 
-    expect(script.async).to.be.true
-    expect(script.defer).to.be.true
+    it('sets async to false only if false is passed in', () => {
+      script = getNewScript({ async: false })
+      const boolean = script.getAttribute('async')
+
+      expect(boolean).toBe(null)
+    })
   })
 
-  it('sets defer to true when defer is set', () => {
-    const script = getNewScript({
-      src: '//www.google.com/script.js',
-      defer: true,
+  describe('defer option', () => {
+    it('sets defer to true by default', () => {
+      script = getNewScript({})
+
+      const boolean = script.getAttribute('defer')
+
+      expect(boolean).toBe('true')
     })
 
-    expect(script.async).to.be.true
-    expect(script.defer).to.be.true
+    it('sets defer to false only if false is passed in', () => {
+      script = getNewScript({ defer: false })
+      const boolean = script.getAttribute('defer')
+
+      expect(boolean).toBe(null)
+    })
   })
 
-  it('sets key value pairs if set', () => {
-    const script = getNewScript({
-      src: '//www.google.com/script.js',
-      async: true
+  describe('options', () => {
+    it('sets whatever options you pass in', () => {
+      script = getNewScript({
+        defer: false,
+        src: '//www.example.com/cdn.js',
+        crossorigin: 'anonymous',
+      })
+
+      const type = script.getAttribute('type')
+      const async = script.getAttribute('async')
+      const defer = script.getAttribute('defer')
+      const src = script.getAttribute('src')
+      const crossorigin = script.getAttribute('crossorigin')
+
+      expect(type).toBe('text/javascript')
+      expect(async).toBe('true')
+      expect(defer).toBe(null)
+      expect(src).toBe('//www.example.com/cdn.js')
+      expect(crossorigin).toBe('anonymous')
     })
-
-    expect(script.src).to.be.equal('//www.google.com/script.js')
-    expect(script.async).to.be.true
-  })
-
-  it('skips over keys that value are falsy', () => {
-    const script = getNewScript({
-      src: '//www.google.com/script.js',
-      async: false,
-      defer: false
-    })
-
-    // expect to be falsy, (false || undefined)
-    expect(script.async).to.be.not.ok
-    expect(script.defer).to.be.not.ok
   })
 })

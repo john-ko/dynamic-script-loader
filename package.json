@@ -4,10 +4,11 @@
   "description": "script loader for module components",
   "main": "src/index.js",
   "scripts": {
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
-    "test": "nyc --reporter=text --reporter=lcov mocha --require @babel/register tests/**/*.spec.js",
+    "test-jest": "jest",
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -28,13 +29,7 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "@babel/register": "^7.0.0",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
-    "mocha": "^5.2.0",
-    "mock-browser": "^0.92.14",
-    "nyc": "^14.1.1",
-    "sinon": "^7.2.3",
-    "sinon-chai": "^3.3.0"
+    "jest": "^25.1.0"
   }
 }
