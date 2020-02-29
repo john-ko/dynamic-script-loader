@@ -1,6 +1,6 @@
 {
   "name": "dynamic-script-loader",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.1",
   "description": "script loader for module components",
   "main": "src/index.js",
   "scripts": {
@@ -8,8 +8,6 @@
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "test": "nyc --reporter=text --reporter=lcov mocha --require @babel/register tests/**/*.spec.js",
-    "test:e2e": "./node_modules/.bin/karma start karma.conf.js --single-run",
-    "test:unit": "./node_modules/.bin/nyc --reporter=text --reporter=lcov ./node_modules/.bin/mocha test/unit --require babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -22,7 +20,7 @@
   },
   "homepage": "https://github.com/john-ko/dynamic-script-loader#readme",
   "dependencies": {
-    "chai-as-promised": "^7.1.1"
+    "lodash": ">=4.17.13"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -31,10 +29,11 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.3",
     "mocha": "^5.2.0",
     "mock-browser": "^0.92.14",
-    "nyc": "^13.3.0",
+    "nyc": "^14.1.1",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0"
   }
