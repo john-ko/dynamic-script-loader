@@ -17,6 +17,11 @@ describe('appendScript (options, success, failure)', () => {
   })
 
   describe('options', () => {
+    it('default option', () => {
+      // not sure how to test default parameters which are methods
+      appendScript()
+    })
+
     it('should pass options to getNewScript method', () => {
       const mockOptions = {
         src: '//www.github.com'

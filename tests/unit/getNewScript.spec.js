@@ -9,7 +9,7 @@ describe('getNewScript (options = {})', () => {
 
   describe('async option', () => {
     it('sets async to true by default', () => {
-      script = getNewScript({})
+      script = getNewScript()
 
       const boolean = script.getAttribute('async')
 
@@ -26,7 +26,7 @@ describe('getNewScript (options = {})', () => {
 
   describe('defer option', () => {
     it('sets defer to true by default', () => {
-      script = getNewScript({})
+      script = getNewScript()
 
       const boolean = script.getAttribute('defer')
 

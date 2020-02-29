@@ -8,6 +8,21 @@ describe('createPromise (options = {})', () => {
 
   })
 
+  it('default parameters for options', () => {
+    appendScript.mockImplementation((opt, resolve, reject) => {
+      resolve()
+    })
+
+    return createPromise()
+      .then(() => {
+        // passed!
+        expect(appendScript).toHaveBeenCalledWith({}, expect.any(Function), expect.any(Function))
+      })
+      .catch(() => {
+        throw new Error('promise should not have failed!')
+      })
+  })
+
   it('can resolve', () => {
     appendScript.mockImplementation((opt, resolve, reject) => {
       resolve()
