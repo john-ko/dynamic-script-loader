@@ -1,4 +1,4 @@
-export function getNewScript (options) {
+export function getNewScript (options = {}) {
   const script = document.createElement('script')
   script.type = 'text/javascript'
 
@@ -19,14 +19,14 @@ export function getNewScript (options) {
   return script
 }
 
-export function createPromise (options) {
+export function createPromise (options = {}) {
   return new Promise((resolve, reject) => {
     // append script to head
     appendScript(options, resolve, reject)
   })
 }
 
-export function appendScript (options, success, failure) {
+export function appendScript (options = {}, success = () => {}, failure = () => {}) {
   const script = getNewScript(options)
 
   script.onload = success
