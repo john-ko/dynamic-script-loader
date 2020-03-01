@@ -1,21 +1,57 @@
-import { createPromise } from '../../src/index'
-import { expect } from 'chai'
+import createPromise from '../../src/createPromise'
 
+import appendScript from '../../src/appendScript'
+jest.mock('../../src/appendScript')
 
-describe('createPromise ()', () => {
+describe('createPromise (options = {})', () => {
   beforeEach(() => {
-    const MockBrowser = require('mock-browser').mocks.MockBrowser
-    global.document = new MockBrowser().getDocument()
+
   })
 
-  afterEach(() => {
-    global.document = {}
+  it('default parameters for options', () => {
+    appendScript.mockImplementation((opt, resolve) => {
+      resolve()
+    })
+
+    return createPromise()
+      .then(() => {
+        // passed!
+        expect(appendScript).toHaveBeenCalledWith({}, expect.any(Function), expect.any(Function))
+      })
+      .catch(() => {
+        throw new Error('promise should not have failed!')
+      })
   })
 
-  it('returns a promise', () => {
-    // cant really test this... dont want to use rewire
-    const promise = createPromise({})
+  it('can resolve', () => {
+    appendScript.mockImplementation((opt, resolve) => {
+      resolve()
+    })
 
-    expect(promise instanceof Promise).to.be.true
+    const optionMock = { src: '//www.johnko.io' }
+    return createPromise(optionMock)
+      .then(() => {
+        // passed!
+        expect(appendScript).toHaveBeenCalledWith(optionMock, expect.any(Function), expect.any(Function))
+      })
+      .catch(() => {
+        throw new Error('promise should not have failed!')
+      })
+  })
+
+  it('can reject', () => {
+    appendScript.mockImplementation((opt, resolve, reject) => {
+      reject()
+    })
+
+    const optionMock = { src: '//www.johnko.io' }
+
+    return createPromise(optionMock)
+      .then(() => {
+        throw new Error('promise should have failed!')
+      })
+      .catch(() => {
+        expect(appendScript).toHaveBeenCalledWith(optionMock, expect.any(Function), expect.any(Function))
+      })
   })
 })

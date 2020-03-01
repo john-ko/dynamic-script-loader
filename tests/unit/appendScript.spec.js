@@ -1,54 +1,51 @@
-import { appendScript } from '../../src/index'
-import chai from 'chai'
-import { expect } from 'chai'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
-
-chai.use(sinonChai)
+import appendScript from '../../src/appendScript'
+import getNewScript from '../../src/getNewScript'
+jest.mock('../../src/getNewScript')
 
 describe('appendScript (options, success, failure)', () => {
+  let script
+
   beforeEach(() => {
-    const MockBrowser = require('mock-browser').mocks.MockBrowser
-    global.document = new MockBrowser().getDocument()
+    script = document.createElement('script')
+    getNewScript.mockImplementation(() => script)
   })
 
   afterEach(() => {
-    global.document = {}
+    // clear
+    script = null
+    document.head.innerHTML = ''
+  })
+
+  describe('options', () => {
+    it('default option', () => {
+      // not sure how to test default parameters which are methods
+      appendScript()
+    })
+
+    it('should pass options to getNewScript method', () => {
+      const mockOptions = {
+        src: '//www.github.com'
+      }
+
+      appendScript(mockOptions)
+
+      expect(getNewScript).toHaveBeenCalledWith(mockOptions)
+    })
   })
 
   describe('success / failure arguments', () => {
-    let success
-    let failure
+    it('should set success method to the script.onload method', () => {
+      const success = jest.fn()
+      appendScript({}, success, () => {})
 
-    beforeEach(() => {
-      success = sinon.spy()
-      failure = sinon.spy()
+      expect(document.head.children[0].onload).toBe(success)
     })
 
-    it('should set the onload to the success callback', () => {
-      const script = appendScript({}, success, failure)
+    it('should set failure method to the script.onerror method', () => {
+      const failure = jest.fn()
+      appendScript({}, () => {}, failure)
 
-      expect(script.onload).to.be.equal(success)
-    })
-
-    it('should set the onerror to the failure callback', () => {
-      const script = appendScript({}, success, failure)
-
-      expect(script.onerror).to.be.equal(failure)
-    })
-  })
-
-  describe('appends the script to the head', () => {
-    let appendChild
-
-    beforeEach(() => {
-      appendChild = sinon.stub(document.head, 'appendChild')
-    })
-
-    it('appends script to the head', () => {
-      const script = appendScript({}, () => {}, () => {})
-
-      expect(appendChild).to.have.been.calledWith(script)
+      expect(document.head.children[0].onerror).toBe(failure)
     })
   })
 })

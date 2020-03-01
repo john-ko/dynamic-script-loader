@@ -3,7 +3,7 @@ module.exports = {
         "node": true,
         "browser": true,
         "es6": true,
-        "mocha": true
+        "jest": true
     },
     "globals": {
         "document": true,

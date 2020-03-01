@@ -3,8 +3,11 @@
 
 # Script Loader
 A script loader for modular components in es6 (build process coming soon). This is built so that each components being responsible for what 3rd party dependencies they need.
-- if script has not been loaded, it will load  the script, run the one time setup callback, then execute the `then`
-- if a script has already been loaded, it will execute the `then`
+- if script has not been loaded, it will load  the script, and return a promise
+- `onLoadHandler` and `onErrorHandler` will execute on script load and on script error
+- script promise will be resolved when the script is loaded, rejects if it errors
+- if a script has already been requested to load throught dynamic script loader, it will return the existing promise
+- all script proimses are added to `window.dynamicScriptLoader` global object
 
 # Install
 `npm i -S dynamic-script-loader`
@@ -13,21 +16,16 @@ A script loader for modular components in es6 (build process coming soon). This 
 simple
 
 ```
-const ScriptLoader = require('dynamic-script-loader')
-const script = new ScriptLoader()
+const scriptLoader = require('dynamic-script-loader')
 
-script.load({
-  src: '//path/to/someExternalJS.js',
-  async: true,  // default to true, you can leave this out
-}), function oneTimeSetUp () {
-  // window.someExternalJS setup here
-})
-  .then(function externalJSSuccessResolver () {
-    // this runs after one time setup
-  })
-  .catch(function scriptDidntLoad () {
-    console.log(':(')
-  })
+scriptLoader({
+    src: ''//path/to/someExternalJS.js'
+  },
+  onLoadHandler, // optional
+  onErrorHandler // optional
+  )
+  .then(resolverFunction)
+  .catch(catchFunction)
 ```
 
 ## Vue
@@ -37,12 +35,11 @@ heres a couple of ways you can use the script loader
 
 ### using it as a method
 ```
-import DynamicScriptLoader from 'dynamic-script-loader'
+import scriptLoader from 'dynamic-script-loader'
 
 Vue.use({
   install: function (Vue, options) {
-    Vue.prototype.$script = new DynamicScriptLoader()
-  }
+    Vue.prototype.$scriptLoader = scriptLoader
 })
 
 // inside a Vue component
@@ -55,7 +52,7 @@ data () {
 
 mounted () {
   // the loader will not load libraries if they have already been loaded
-  this.$script.load({
+  this.$scriptLoader({
     src: '//some-cdn/src/js/library.js',
     async: true
   }, () => {
@@ -75,26 +72,17 @@ mounted () {
 }
 ```
 
+# CAVEATS
+script loading uses URL's as unique keys so if urls change by for example, query string, then the script will try to load it again.
+**example:**
+- urlA = `//www.example.com/script.js`
+- urlB = `https://www.example.com/script.js`
+- urlC = `https://www.example.com/script.js?hi`
+
+the script loader will treat these as separate javascript files
+
 # TODO
-- build process and export to dist folder
-- remove class style and use more functional
-
-would like to use this as
-
-```
-script.load('//path/to/someExternalJS.js')
-  .once(() => {
-    // one time setup
-  })
-  .then(() => {
-    // success! :D
-  })
-  .catch(() => {
-    // failure! D:
-  })
-```
-
-or instead of `once` maybe `setup` ?
+- use typescript!
 
 # Contributing
 
@@ -102,5 +90,4 @@ or instead of `once` maybe `setup` ?
 - `cd dynamic-script-loader`
 - `npm install`
 - `add changes`
-- `npm run test:unit`
-- `npm run test:e2e`
+- `npm test`

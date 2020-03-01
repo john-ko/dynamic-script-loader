@@ -1,87 +1,62 @@
-import loadScript from '../../src/index'
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-import { expect } from 'chai'
-import browserMock from 'mock-browser'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
+import scriptLoader from '../../src/index'
 
-const MockBrowser = browserMock.mocks.MockBrowser
+import createPromise from '../../src/createPromise'
+jest.mock('../../src/createPromise')
 
-chai.use(sinonChai)
-chai.use(chaiAsPromised)
-
-const URL = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'
-describe('dynamic script loader', () => {
-  describe('when run on serverside', () => {
-    it('should fail with a promise rejection', () => {
-      expect(loadScript()).to.be.rejectedWith('sorry bro client side only')
-    })
+describe('scriptLoader', () => {
+  afterEach(() => {
+    createPromise.mockClear()
   })
 
-  describe('when src is not set', () => {
-    beforeEach(() => {
-      global.window = new MockBrowser().getWindow()
-      global.document = new MockBrowser().getDocument()
+  it('default onLoad', () => {
+    createPromise.mockImplementation(() => {
+      return new Promise((resolve) => resolve({}))
     })
 
-    afterEach(() => {
-      global.window = {}
-      global.document = {}
-    })
-
-    it('should fail with a promise rejection', () => {
-      expect(loadScript()).to.be.rejectedWith('src must be set!')
-    })
+    return scriptLoader({ src: 'key-onload' })
+      .then(() => {
+        expect(createPromise).toHaveBeenCalled()
+      })
   })
 
-  describe('initial callback', () => {
-    let callback
-    let thennable
-
-    beforeEach(() => {
-      callback = sinon.spy()
-      thennable = sinon.spy()
-      global.window = new MockBrowser().getWindow()
-      global.document = new MockBrowser().getDocument()
+  it('default onError', () => {
+    createPromise.mockImplementation(() => {
+      return new Promise((resolve, reject) => reject({}))
     })
 
-    afterEach(() => {
-      global.window = {}
-      global.document = {}
-    })
-
-    it('it runs initial callback', (done) => {
-      loadScript({ src: URL }, callback)
-        .then(() => {
-          expect(callback).to.have.been.called
-          done()
-        })
-    })
-
-    it('loader runs callback only once', (done) => {
-      loadScript({ src: URL }, callback)
-        .then(thennable)
-
-      loadScript({ src: URL }, callback)
-        .then(thennable)
-        .then(() => {
-          expect(callback).to.have.been.calledOnce
-          done()
-        })
-    })
-
-    it('loader runs then after each load call', (done) => {
-      loadScript({ src: URL }, callback)
-        .then(thennable)
-
-      loadScript({ src: URL }, callback)
-        .then(thennable)
-        .then(() => {
-          expect(thennable).to.have.been.calledTwice
-          done()
-        })
-    })
+    return scriptLoader({ src: 'key-onerror' })
+      .then(() => {
+        expect(createPromise).toHaveBeenCalled()
+      })
   })
 
+  it('onLoad method runs after script has been loaded', () => {
+    const onLoad = jest.fn()
+    const onError = jest.fn()
+
+    createPromise.mockImplementation(() => {
+      return new Promise((resolve) => resolve({}))
+    })
+
+    return scriptLoader({ src: 'key-onload-success' }, onLoad, onError)
+      .then(() => {
+        expect(createPromise).toHaveBeenCalled()
+        expect(onLoad).toHaveBeenCalled()
+      })
+  })
+
+  it('onError runs on script load failure', () => {
+    const onLoad = jest.fn()
+    const onError = jest.fn()
+
+    createPromise.mockImplementation(() => {
+      return new Promise((resolve, reject) => reject({}))
+    })
+
+    return scriptLoader({ src: 'key-onerror-failure' }, onLoad, onError)
+      .then(() => {
+        expect(createPromise).toHaveBeenCalled()
+        expect(onError).toHaveBeenCalled()
+      })
+  })
 })
