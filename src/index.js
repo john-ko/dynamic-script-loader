@@ -15,7 +15,7 @@ import createPromise from './createPromise'
  * return Promise (resolves when the script is loaded, rejects when the script errors)
  */
 export default function (
-  options,
+  options = {},
   onLoadHandler = () => {},
   orErrorHandler = () => {}
 ) {
@@ -23,7 +23,7 @@ export default function (
     return Promise.reject('sorry bro client side only')
   }
 
-  // Gloable namespace to prevent mismatch with different versions
+  // Global namespace to prevent mismatch with different versions
   window.dynamicScriptLoader = window.dynamicScriptLoader || Object.create(null)
 
   const src = options.src || ''
