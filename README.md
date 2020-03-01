@@ -82,11 +82,7 @@ script loading uses URL's as unique keys so if urls change by for example, query
 the script loader will treat these as separate javascript files
 
 # TODO
-- currently `async` and `defer` and both placed on the tag, after reading up on it, looks like only one is necessary
-- https://bitsofco.de/async-vs-defer/
-- https://flaviocopes.com/javascript-async-defer/
-- will fallback to whichever is Best practice
-- also since this script is most likely loaded on content load and scriptloading is done after, might not matter? should test.
+- use typescript!
 
 # Contributing
 

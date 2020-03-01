@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## [1.0.0-alpha]
+## [NEXT]
+### Refactored
+- Changed unit tests from mocha to jest
+- Updated test to get 100% coverage
+- Updated and cleaned up code
+- Removed unused npm scripts and devDependencies
+
+## [1.0.1]
 ### Refactored
 - Refactor the way dynamic script generator was returning
 - Use promises and resolved promises to handle multiple request.
