@@ -9,7 +9,7 @@ describe('createPromise (options = {})', () => {
   })
 
   it('default parameters for options', () => {
-    appendScript.mockImplementation((opt, resolve, reject) => {
+    appendScript.mockImplementation((opt, resolve) => {
       resolve()
     })
 
@@ -24,7 +24,7 @@ describe('createPromise (options = {})', () => {
   })
 
   it('can resolve', () => {
-    appendScript.mockImplementation((opt, resolve, reject) => {
+    appendScript.mockImplementation((opt, resolve) => {
       resolve()
     })
 

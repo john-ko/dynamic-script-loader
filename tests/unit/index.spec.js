@@ -10,7 +10,7 @@ describe('scriptLoader', () => {
 
   it('default onLoad', () => {
     createPromise.mockImplementation(() => {
-      return new Promise((resolve, reject) => resolve({}))
+      return new Promise((resolve) => resolve({}))
     })
 
     return scriptLoader({ src: 'key-onload' })
@@ -35,7 +35,7 @@ describe('scriptLoader', () => {
     const onError = jest.fn()
 
     createPromise.mockImplementation(() => {
-      return new Promise((resolve, reject) => resolve({}))
+      return new Promise((resolve) => resolve({}))
     })
 
     return scriptLoader({ src: 'key-onload-success' }, onLoad, onError)
