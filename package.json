@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "script loader for module components",
   "main": "src/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "preversion": "npm test",
