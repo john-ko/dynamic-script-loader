@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [NEXT]
+## [1.0.2]
 ### Refactored
 - Changed unit tests from mocha to jest
 - Updated test to get 100% coverage
