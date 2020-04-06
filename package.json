@@ -9,12 +9,15 @@
   "scripts": {
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "preversion": "npm test",
-    "postversion": "git push && git push --tags",
+    "postversion": "npm publish && git push && git push --tags",
     "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/john-ko/dynamic-script-loader.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "author": "",
   "license": "MIT",
@@ -23,15 +26,15 @@
   },
   "homepage": "https://github.com/john-ko/dynamic-script-loader#readme",
   "dependencies": {
-    "lodash": ">=4.17.13"
+    "lodash": ">=4.17.15"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/register": "^7.0.0",
-    "coveralls": "^3.0.3",
-    "jest": "^25.1.0"
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "coveralls": "^3.0.11",
+    "jest": "^25.2.7"
   }
 }
